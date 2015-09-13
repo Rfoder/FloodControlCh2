@@ -222,6 +222,34 @@ private void CheckScoreingChain(List<Vector2> WaterChain)
         {
         gameBoard.SetSquare((int)ScoringSquare.X,
         (int)ScoringSquare.Y, "Empty");
-            {
+            }
+         }
+        }
     }
+}
+
+private void HandleMouseInput(MouseState mouseState)
+{
+int x = ((mouseState.X -
+    (int)gameBoardDisplayOrigin.X) / GamePiece.PieceWidth);
+
+int y = ((mouseState.Y -
+    (int)gameBoardDisplayOrigin.Y) / GamePiece.PieceHeight);
+
+if ((x >= 0) && (x < GameBoard.GameBoardWidth) &&
+((y >= 0) && (y < GameBoard.GameBoardHeight))
+{
+if (mouseState.LeftButton == ButtonState.Pressed)
+  {
+    gameBoard.RotatePiece(x,y, false);
+timeSinceLastInput = 0.0f;
+}
+if (mouseState.RightButton == ButtonState.Pressed)
+  {
+    gameBoard.RotatePiece(x,y, true);
+timeSinceLastInput = 0.0f;
+        }
+    }
+  }
+ }
 }
