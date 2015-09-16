@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace FloodComtrol
+namespace FloodControl
 {
     class GameBoard
-    (
-        Random ran = new Random();
+    {
+        Random rand = new Random();
         
         public const int GameBoardWidth = 8;
         public const int GameBoardHeight = 10;
         
         private GamePiece[,] boardSquares =
             new GamePiece[GameBoardWidth, GameBoardHeight];
-           privateList<Vector2> WaterTracker = new LIst<Vector2>();
+           private List<Vector2> WaterTracker = new List<Vector2>();
            
            public GameBoard()
            {
@@ -26,7 +26,7 @@ namespace FloodComtrol
             {
                 for (int x = 0; x < GameBoardWidth; x++)
                     for (int y = 0; y < GameBoardHeight; y++)
-                        boardSquares[x, y] = new GamePieve("Empty");
+                        boardSquares[x, y] = new GamePiece("Empty");
                 
             }
             
@@ -37,7 +37,7 @@ namespace FloodComtrol
             
             public Rectangle GetSourceRect(int x, int y)
             {
-                return boardSquares[c, y].GetSourceRect(); 
+                return boardSquares[x, y].GetSourceRect(); 
             }
             
             public string GetSquare(int x, int y)
@@ -50,7 +50,7 @@ namespace FloodComtrol
                 boardSquares[x, y].SetPiece(pieceName);
             }
             
-            public bool HasConnector(int x, int y, string direction);
+            public bool HasConnector(int x, int y, string direction)
             {
                 return boardSquares[x, y].HasConnector(direction);
             }
@@ -58,7 +58,7 @@ namespace FloodComtrol
             public void RandomPiece(int x, int y)
             {
                 boardSquares[x, y].SetPiece(GamePiece.PieceTypes[rand.Next(0,
-                    GamePiece.MaxPlayablePieceIndex + 1]);
+                    GamePiece.MaxPlayablePieceIndex + 1)]);
             }
             
             public void FillFromAbove(int x, int y)
@@ -69,7 +69,7 @@ namespace FloodComtrol
                     if (GetSquare(x, rowLookup) != "Empty")
                     {
                         SetSquare(x, y,
-                           GetSQuare(x, rowLookup));
+                           GetSquare(x, rowLookup));
                          SetSquare(x, rowLookup, "Empty");
                          rowLookup = -1;    
             }
@@ -82,11 +82,11 @@ namespace FloodComtrol
               {
                   for (int x = 0; x < GameBoard.GameBoardWidth; x++)
                   {
-                      for (int y = GameBoard.GameBoardHeight - 1; y >=0; y--)
+                      for (int y = GameBoard.GameBoardHeight - 1; y >= 0; y--)
                       {
                           if (GetSquare(x, y) == "Empty")
                           {
-                              FillFormAbove(x, y);
+                              FillFromAbove(x, y);
                             }
                         }
                     }
@@ -106,7 +106,7 @@ namespace FloodComtrol
                 {
                     for(int y = 0; y < GameBoardHeight; y++)
                         for (int x = 0; x < GameBoardWidth; x++)
-                          boardSquares[x, y].RemoveStuffix("W");
+                          boardSquares[x, y].RemoveSuffix("W");
 
                 }
                 
@@ -123,8 +123,8 @@ namespace FloodComtrol
                         if (boardSquares[x, y].HasConnector(fromDirection) &&
                             !boardSquares[x, y].Suffix.Contains("W"))
                             {
-                                FillPice(x, y);
-                                WAterTracker.Add(new Vector2(x, y));
+                                FillPiece(x, y);
+                                WaterTracker.Add(new Vector2(x, y));
                                 foreach (string end in
                                         boardSquares[x, y].GetOtherEnds(fromDirection))
                                         switch(end)
@@ -146,8 +146,8 @@ namespace FloodComtrol
                             public List<Vector2> GetWaterChain(int y)
                             {
                                 WaterTracker.Clear();
-                                PropagateWater(0, y, "Left")
-                                PropagateWAterTracker;
+                                PropagateWater(0, y, "Left");
+                                return WaterTracker;
                             }
                             
                             

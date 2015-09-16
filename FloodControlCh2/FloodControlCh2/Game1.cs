@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace FloodControlCh2
+namespace FloodControl
     // Robert foder
 {
     /// <summary>
@@ -22,7 +22,7 @@ namespace FloodControlCh2
 
         Texture2D playingPieces;
         Texture2D backgroundScreen;
-        Texture2D tileScreen;
+        Texture2D titleScreen;
 
         GameBoard gameBoard;
 
@@ -30,8 +30,8 @@ namespace FloodControlCh2
 
         int playerScore = 0;
 
-        enum GameStates { TitileScreen, Playing };
-        GameStates gameState = GameStates.TitileScreen;
+        enum GameStates { TitleScreen, Playing };
+        GameStates gameState = GameStates.TitleScreen;
 
         Rectangle EmptyPiece = new Rectangle(1, 247, 40, 40);
 
@@ -101,8 +101,8 @@ namespace FloodControlCh2
 
             switch (gameState)
             {
-                case GameStates.TitileScreen:
-                    if(Keyboard.GetState(0.IsKeyDown(Keys.Space))
+                case GameStates.TitleScreen:
+                    if(Keyboard.GetState().IsKeyDown(Keys.Space))
                     {
                         gameBoard.ClearBoard();
                         gameBoard.GenerateNewPieces(false);
@@ -110,7 +110,7 @@ namespace FloodControlCh2
                         gameState = GameStates.Playing;
                     }
                     break;
-            }
+            
                 case GameStates.Playing:
             timeSinceLastInput +=
                 (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -122,9 +122,9 @@ namespace FloodControlCh2
 
             gameBoard.ResetWater();
            
-            for (int y = 0; y < gameBoard.GameBoardHeight; y++)
+            for (int y = 0; y < GameBoard.GameBoardHeight; y++)
             {
-                CheckScoreingChain(gameBoard.GetWaterChain(y));
+                CheckScoringChain(gameBoard.GetWaterChain(y));
             }
 
             gameBoard.GenerateNewPieces(true);
@@ -164,27 +164,26 @@ spriteBatch.Draw(backgroundScreen,
     this.Window.ClientBounds.Height),
     Color.White);
 
-for(interface x = 0; x < GameBoard.GameBoardWidth; x++)
+for(int x = 0; x < GameBoard.GameBoardWidth; x++)
     for (int y = 0; y < GameBoard.GameBoardHeight; y++)
 {
     int pixelX = (int)gameBoardDisplayOrigin.X +
         (x * GamePiece.PieceWidth);
-    int pixelX = (int)gameBoardDisplayOrigin.Y +
+    int pixelY = (int)gameBoardDisplayOrigin.Y +
         (y * GamePiece.PieceHeight);
 
-            SpriteBatch.Draw(
+            spriteBatch.Draw(
                 playingPieces,
             new Rectangle(
                 pixelX,
                 pixelY,
-                GamePieceWidth,
-                GamePieceHeight),
+                GamePiece.PieceWidth,
+                GamePiece.PieceHeight),
             EmptyPiece,
             Color.White);
 
-      SpriteBatch.Draw(
+      spriteBatch.Draw(
                 playingPieces, new Rectangle(
-            new Rectangle(
                 pixelX,
                 pixelY,
                 GamePiece.PieceWidth,
@@ -199,19 +198,19 @@ spriteBatch.End();
         }
 private int DetermineScore(int SquareCount)
 {
-return (int)((Math.pow((SqaureCount / 5), 2) + SquareCount) * 10);
+return (int)((Math.Pow((SquareCount / 5), 2) + SquareCount) * 10);
 }
 
-private void CheckScoreingChain(List<Vector2> WaterChain)
+private void CheckScoringChain(List<Vector2> WaterChain)
 {
 
     if(WaterChain.Count > 0)
 {
-    Vector2 LastPipe = WaterChain[WAterChain.Count - 1];
+    Vector2 LastPipe = WaterChain[WaterChain.Count - 1];
 
 
 
-    if (LastPipe.X == GameBoard.GameBoardWidth.Count);
+    if (LastPipe.X == GameBoard.GameBoardWidth - 1)
     {
         if (gameBoard.HasConnector(
         (int)LastPipe.X, (int) LastPipe.Y, "Right"))
@@ -223,13 +222,14 @@ private void CheckScoreingChain(List<Vector2> WaterChain)
         gameBoard.SetSquare((int)ScoringSquare.X,
         (int)ScoringSquare.Y, "Empty");
             }
-         }
+          }
         }
     }
 }
 
 private void HandleMouseInput(MouseState mouseState)
 {
+
 int x = ((mouseState.X -
     (int)gameBoardDisplayOrigin.X) / GamePiece.PieceWidth);
 
@@ -237,7 +237,7 @@ int y = ((mouseState.Y -
     (int)gameBoardDisplayOrigin.Y) / GamePiece.PieceHeight);
 
 if ((x >= 0) && (x < GameBoard.GameBoardWidth) &&
-((y >= 0) && (y < GameBoard.GameBoardHeight))
+(y >= 0) && (y < GameBoard.GameBoardHeight))
 {
 if (mouseState.LeftButton == ButtonState.Pressed)
   {
@@ -246,7 +246,7 @@ timeSinceLastInput = 0.0f;
 }
 if (mouseState.RightButton == ButtonState.Pressed)
   {
-    gameBoard.RotatePiece(x,y, true);
+    gameBoard.RotatePiece(x, y, true);
 timeSinceLastInput = 0.0f;
         }
     }

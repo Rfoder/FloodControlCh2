@@ -1,5 +1,5 @@
-﻿using System:
-using System.Collection.Generic:
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
@@ -9,6 +9,8 @@ namespace FloodControl
 {
         class GamePiece
         {
+             public static string[] PieceTypes =
+             {
             "Left,Right",
             "Top,Bottom",
             "Left,Top",
@@ -19,7 +21,7 @@ namespace FloodControl
         };
         
         public const int PieceHeight = 40;
-        public const int pieceWidth = 40;
+        public const int PieceWidth = 40;
         
         public const int MaxPlayablePieceIndex = 5;
         public const int EmptyPieceIndex = 6;
@@ -42,7 +44,7 @@ namespace FloodControl
         public GamePiece(string type)
         {
             pieceType = type;
-            piecesuffix = "";
+            pieceSuffix = "";
             
         }
         
@@ -56,10 +58,10 @@ namespace FloodControl
             get { return pieceSuffix; }
         }
         
-        public void setPiece(string type, string suffix)
+        public void SetPiece(string type, string suffix)
         {
             pieceType = type;
-            pieceSuffix + suffix;
+            pieceSuffix = suffix;
             
         }
         
@@ -76,7 +78,7 @@ namespace FloodControl
         
         public void RemoveSuffix(string suffix)
         {
-            pieceSuffix = pieceSuffix.Relace(suffix, "");
+            pieceSuffix = pieceSuffix.Replace(suffix, "");
         }
         
         public void RotatePiece(bool Clockwise)
@@ -91,7 +93,7 @@ namespace FloodControl
                     break; 
                 case "Left,Top":
                 if (Clockwise)
-                    pieceType = "Right,Bottom";
+                    pieceType = "Top,Right";
                     else
                     pieceType = "Bottom,Left";
                     break;
@@ -99,7 +101,7 @@ namespace FloodControl
                       if (Clockwise)
                     pieceType = "Right,Bottom";
                         else
-                        pieceType = "Left,Top"
+                        pieceType = "Left,Top";
                     break;
                      case "Right,Bottom":
                       if (Clockwise)
@@ -108,10 +110,10 @@ namespace FloodControl
                         pieceType = "Top,Right";
                     break;
                       case "Bottom,Left":
-                      if (Clockwise)
-                    pieceType = "Left,Top";
-                        else
-                        pieceType = "Right,Bottom"
+                    if (Clockwise)
+                        pieceType = "Left,Top";
+                    else
+                        pieceType = "Right,Bottom";
                     break;
                     case "Empty":
                     break;
@@ -127,7 +129,7 @@ namespace FloodControl
                     if (end != startingEnd)
                         opposites.Add(end);
                     }
-                    return opposities.ToArray();
+                    return opposites.ToArray();
                 }
                 public bool HasConnector(string direction)
                 {
