@@ -114,13 +114,15 @@ namespace FloodControl
                 case GameStates.Playing:
             timeSinceLastInput +=
                 (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (timeSinceLastInput >= MinTimeSinceLastInput)
+                // changed on pg. 68
+            if (gameBoard.ArePiecesAnimating())
             {
-                HandleMouseInput(Mouse.GetState());
+                gameBoard.UpdateAnimatedPieces();
             }
+            else
+            {
 
-            gameBoard.ResetWater();
+                gameBoard.ResetWater();
            
             for (int y = 0; y < GameBoard.GameBoardHeight; y++)
             {
@@ -128,11 +130,72 @@ namespace FloodControl
             }
 
             gameBoard.GenerateNewPieces(true);
-            break;
+            
+                if (timeSinceLastInput >= MinTimeSinceLastInput)
         }
-            base.Update(gameTime);
+            HandleMouseInput(Mouse.GetState());
         }
+      }
+        break;
 
+        private void DrawEmptyPiece(int pixelX, int pixelY)
+        {
+            spriteBatch.Draw(
+                playingPieces,
+                new Rectangle(pixelX, pixelY,
+                    GamePiece.PieceWidth, GamePiece.PieceHeight),
+                    EmptyPiece,
+                    Color.White);                 
+        }
+       private void DrawStandardPiece(int x, int y,
+           int pixelX, int pixelY)
+       {
+           spriteBatch.Draw(
+               playingPieces, new Rectangle(pixelX, pixelY,
+                   GamePiece.PieceWidth, GamePiece.PieceHeight),
+                   gameBoard.GetSourceRect(x, y),
+                   Color.White);
+       }
+        private void DrawFallingPiece(int pixelX, int pixelY,
+            string positionName)
+        {
+            spriteBatch.Draw(
+                playingPieces,
+                new Rectangle(pixelX, int pixelY -
+                gameBoard.fallingPieces[positionName].VerticalOffset,
+                GamePiece.PieceWidth, GamePiece.PieceHeight),
+                gameBoard.fallingPieces[positionName].GetSourceRect(),
+                Color.White);
+        }
+        
+        private void DrawFadingPiece(int pixelX, int pixelY,
+            string postitionName)
+
+        {
+             spriteBatch.Draw(
+                playingPieces,
+                new Rectangle(pixelX, int pixelY,
+               GamePiece.PieceWidth, GamePiece.PieceHeight),          
+                gameBoard.fadingPieces[positionName].GetSourceRect(),
+                Color.White);
+            gameBoard.fadingPieces[postitionName].alphaLevel alphaLevel);
+        }
+        private void DrawRotatingPiece(int pixelX, int pixelY,
+            string postitionName)
+        {
+             spriteBatch.Draw(
+                playingPieces,
+                new Rectangle(pixelX + (GamePieceWidth / 2), 
+                    pixelY + (GamePiece.PieceHeight / 2),
+                    GamePiece.PieceWidth,
+                    GamePiece.PieceHeight),
+                gameBoard.rotatingPieces[positionName].GetSourceRect(),
+                Color.White,
+                gameBoard.rotatingPieces[positionName].RotrationAmount,
+                new Vector2(GamePiece.PieceWidth / 2,
+                    GamePiece.PieceHeight/ 2),
+                    SpriteEffects.None, 0.0f);
+        }
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -164,6 +227,7 @@ spriteBatch.Draw(backgroundScreen,
     this.Window.ClientBounds.Height),
     Color.White);
 
+    // moded on pg. 71
 for(int x = 0; x < GameBoard.GameBoardWidth; x++)
     for (int y = 0; y < GameBoard.GameBoardHeight; y++)
 {
@@ -172,25 +236,33 @@ for(int x = 0; x < GameBoard.GameBoardWidth; x++)
     int pixelY = (int)gameBoardDisplayOrigin.Y +
         (y * GamePiece.PieceHeight);
 
-            spriteBatch.Draw(
-                playingPieces,
-            new Rectangle(
-                pixelX,
-                pixelY,
-                GamePiece.PieceWidth,
-                GamePiece.PieceHeight),
-            EmptyPiece,
-            Color.White);
+        DrawEmptyPiece(pixelX, pixelY);
 
-      spriteBatch.Draw(
-                playingPieces, new Rectangle(
-                pixelX,
-                pixelY,
-                GamePiece.PieceWidth,
-                GamePiece.PieceHeight),
-            gameBoard.GetSourceRect(x, y),
-            Color.White);
+        bool pieceDown = false;
+
+        string position = x.ToString() + "_" + y.ToString();
+
+        if (gameBoard.rotatingPieces.ContainsKey(positionName))
+        {
+            DrawRotatingPiece(pixelX, pixelY, positionName);
+            pieceDrawn = true;
+        }
+        if (gameBoard.fadingPieces.ContainsKey(positionName))
+        {
+             DrawfadingingPiece(pixelX, pixelY, positionName);
+            pieceDrawn = true;
+        }
+         if (gameBoard.fallingPieces.ContainsKey(positionName))
+         {
+             DrawFallingingPiece(pixelX, pixelY, positionName);
+            pieceDrawn = true;
+         }
+        if (!pieceDrawn)
+        {
+            DrawStandardPiece(x, y, pixelX, pixelY);
+        }
 }
+
         this.Window.Title = playerScore.ToString();
 spriteBatch.End();
 }
@@ -219,6 +291,13 @@ private void CheckScoringChain(List<Vector2> WaterChain)
 
     foreach (Vector2 ScoringSquare in WaterChain)
         {
+        // pg. 66
+            gameBoard.AddFadingPiece(
+            (int)ScoringSquare.X,
+            (int)ScoringSquare.Y,
+            gameBoard.GetSquare(
+            (int)ScoringSquare.X,
+            (int)ScoringSquare.Y));
         gameBoard.SetSquare((int)ScoringSquare.X,
         (int)ScoringSquare.Y, "Empty");
             }
@@ -241,11 +320,19 @@ if ((x >= 0) && (x < GameBoard.GameBoardWidth) &&
 {
 if (mouseState.LeftButton == ButtonState.Pressed)
   {
+    // pg. 68
+    gameBoard.AddRotatingPiece(x, y,
+        gameBoard.GetSquare(x, y), false;
+
     gameBoard.RotatePiece(x,y, false);
 timeSinceLastInput = 0.0f;
 }
 if (mouseState.RightButton == ButtonState.Pressed)
   {
+    // 68
+     gameBoard.AddRotatingPiece(x, y,
+         gameBoard.GetSquare(x, y), true);
+
     gameBoard.RotatePiece(x, y, true);
 timeSinceLastInput = 0.0f;
         }

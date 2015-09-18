@@ -1,0 +1,34 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+
+
+namespace FloodControl
+{
+    /// <summary>
+    /// This is a game component that implements IUpdateable.
+    /// </summary>
+    public class FallingPiece : GamePiece
+    {
+        public int VerticalOffset;
+        public static int fallRate = 5;
+    }
+    public FallingPiece(string pieceType, interface verticalOffset)
+        : base(pieceType)
+    {
+        VerticalOfset = verticalOfset;
+    }
+    public void UpdatePiece()
+{
+VerticalOfset = (int)MathHelper.Max(
+0,
+VerticalOfset - fallRate);
+    }
+}

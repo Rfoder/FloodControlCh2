@@ -16,7 +16,91 @@ namespace FloodControl
         private GamePiece[,] boardSquares =
             new GamePiece[GameBoardWidth, GameBoardHeight];
            private List<Vector2> WaterTracker = new List<Vector2>();
-           
+
+             //directories for chap 3 pg. 63
+           public Dictionary<string, FallingPiece> fallingPieces =
+               new Directionary<string, FallingPiece>();
+           public Dictionary<string, RotatingPiece> rotatingPieces =
+                  new Directionary<string, RotatingPiece>();
+           public Dictionary<string, FadingPiece> fadingPieces =
+                  new Directionary<string, FadingPiece>();
+
+        // fallingpioece entries chap 3 pg. 63
+           public void AddFallingPiece(int X, int Y,
+               string PieceName, int VerticalOfset)
+           {
+               fallingPieces[X.ToString() + "_" + Y.ToString()] = new
+               FallingPiece(PieceName, VerticalOfset);
+           }
+           public void AddRotatingPiece(int X, int Y,
+                 string PieceName, bool Clockwise)
+           {
+               rotatingPieces[X.ToString() + "_" + Y.ToString()] = new
+               RotatingPiece(PieceName, Clockwise);
+           }
+           public void AddFadingPiece(int X, int Y, string PieceName)
+                 
+           {
+               fadingPieces[X.ToString() + "_" + Y.ToString()] = new
+               FadingPiece(PieceName, "W");
+           }
+
+        // pg 63
+           public bool ArePiecesAnimating()
+           {
+               if ((fallingPieces.Count == 0) &&
+                   (rotatingPieces.Count == 0) &&
+                   (fadingPieces.Count == 0))
+               {
+                   return false;
+               }
+               else
+               {
+                   return true;
+               }
+           }
+        // pg. 64
+           private void UpdateFadingPieces()
+           {
+               Queue<string> RemoveKeys = new Queue<string>();
+
+               foreach (string thisKey in fadingPieces.Keys)
+               {
+                   fadingPieces[thisKey].UpdatePiece();
+                   if (fadingPieces[thisKey].alphaLevel == 0.0f)
+                       RemoveKeys.Enqueue(thisKey.ToString());
+               }
+               while (RemoveKeys.Count > 0)
+                   fadingPieces.Remove(RemoveKeys.Dequeue());
+           }
+           private void UpdateRotatingPieces()
+           {
+               Queue<string> RemoveKeys = new Queue<string>();
+
+               foreach (string thisKey in rotatingPieces.Keys)
+               {
+                   rotatingPieces[thisKey].UpdatePiece();
+
+                   if (rotatingPieces[thisKey].rotationTicksRemaining == 0)
+                       RemoveKeys.Enqueue(thisKey.ToString());
+               }
+               while (RemoveKeys.Count > 0)
+                   rotatingPieces.Remove(RemoveKeys.Dequeue());              
+           }
+        // pg. 65
+           public void UpdateAnimatedPieces()
+           {
+               if (fadingPieces.Count == 0)
+               {
+                   UpdateFallingPieces();
+                   UpdateRotatingPieces();
+               }
+               else
+               {
+                   UpdateFadingPieces();
+               }
+           }
+
            public GameBoard()
            {
                ClearBoard();
@@ -63,6 +147,10 @@ namespace FloodControl
             
             public void FillFromAbove(int x, int y)
             {
+                // pg. 67
+                AddFallingPiece(x, y, GetSquare(x, y),
+                    GamePiece.PieceHeight * (y - rowLookup));
+
                 int rowLookup = y - 1;
                 while (rowLookup >= 0)
                 {
@@ -98,6 +186,9 @@ namespace FloodControl
                         if (GetSquare(x, y) == "Empty")
                         {
                             RandomPiece(x, y);
+                            // pg. 67
+                            AddFallingPiece(x, y, GetSquare(x, y),
+                                GamePiece.PieceHeight * GameBoardHeight);
                         }
                     }
                 }
