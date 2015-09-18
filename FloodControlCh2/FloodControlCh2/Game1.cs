@@ -72,9 +72,9 @@ namespace FloodControl
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            playingPieces = Content.Load<Texture2D>(@"Tile_Sheet");
-            backgroundScreen = Content.Load<Texture2D>(@"BackGround");
-            titleScreen = Content.Load<Texture2D>(@"TitleScreen");
+            playingPieces = Content.Load<Texture2D>(@"Textures\Tile_Sheet");
+            backgroundScreen = Content.Load<Texture2D>(@"Textures\BackGround");
+            titleScreen = Content.Load<Texture2D>(@"Textures\TitleScreen");
         }
 
         /// <summary>
