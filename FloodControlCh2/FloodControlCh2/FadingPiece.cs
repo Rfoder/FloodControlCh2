@@ -20,7 +20,7 @@ namespace FloodControl
         public float alphaLevel = 1.0f;
         public static float alphaChangeRate = 0.2f;
 
-    }
+    
     public FadingPiece(string pieceType, string suffix)
         : base (pieceType, suffix)
 {
@@ -30,6 +30,9 @@ namespace FloodControl
 {
     alphaLevel = MathHelper.Max(
         0,
-        alphaLevel - alpha ChangeRate);
+        alphaLevel - alphaChangeRate);
+}
+}
+
 }
 

@@ -33,6 +33,17 @@ namespace FloodControl
         
         private string pieceType = "";
         private string pieceSuffix = "";
+
+        public string PieceType
+        {
+            get { return pieceType; }
+        }
+
+        public string Suffix
+        {
+            get { return pieceSuffix; }
+        }
+        
         
         public GamePiece(string type, string suffix)
         {
@@ -47,16 +58,7 @@ namespace FloodControl
             pieceSuffix = "";
             
         }
-        
-        public string PieceType
-        {
-            get { return pieceType; }
-        }
-        
-        public string Suffix
-        {
-            get { return pieceSuffix; }
-        }
+             
         
         public void SetPiece(string type, string suffix)
         {

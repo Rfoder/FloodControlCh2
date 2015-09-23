@@ -19,16 +19,17 @@ namespace FloodControl
     {
         public int VerticalOffset;
         public static int fallRate = 5;
-    }
-    public FallingPiece(string pieceType, interface verticalOffset)
-        : base(pieceType)
-    {
-        VerticalOfset = verticalOfset;
-    }
-    public void UpdatePiece()
-{
-VerticalOfset = (int)MathHelper.Max(
-0,
-VerticalOfset - fallRate);
+
+        public FallingPiece(string pieceType, int verticalOffset)
+            : base(pieceType)
+        {
+            VerticalOffset = verticalOffset;
+        }
+        public void UpdatePiece()
+        {
+            VerticalOffset = (int)MathHelper.Max(
+            0,
+            VerticalOffset - fallRate);
+        }
     }
 }
