@@ -15,7 +15,7 @@ namespace FloodControl
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class FallingPiece : GamePiece
+    class FallingPiece : GamePiece
     {
         public int VerticalOffset;
         public static int fallRate = 5;

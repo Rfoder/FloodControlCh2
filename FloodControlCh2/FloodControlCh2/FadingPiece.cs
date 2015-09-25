@@ -15,10 +15,10 @@ namespace FloodControl
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class FadingPiece : GamePiece
+    class FadingPiece : GamePiece
     {
         public float alphaLevel = 1.0f;
-        public static float alphaChangeRate = 0.2f;
+        public static float alphaChangeRate = 0.02f;
 
     
     public FadingPiece(string pieceType, string suffix)
@@ -31,8 +31,8 @@ namespace FloodControl
     alphaLevel = MathHelper.Max(
         0,
         alphaLevel - alphaChangeRate);
-}
-}
+    }
+  }  
 
 }
 

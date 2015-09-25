@@ -17,7 +17,7 @@ namespace FloodControl
         public string Text;
         public Color DrawColor;
         public int displayCounter;
-        public int MaxDisplayCount = 30;
+        public int maxDisplayCount = 30;
         private float scale = 0.4f;
         private float lastScaleAmount = 0.0f;
         private float scaleAmount = 0.4f;
@@ -29,7 +29,7 @@ namespace FloodControl
 
         public bool IsCompleted
         {
-            get { return (displayCounter > MaxDisplayCount); }
+            get { return (displayCounter > maxDisplayCount); }
         }
 
         public ScoreZoom(string displayText, Color fontColor)

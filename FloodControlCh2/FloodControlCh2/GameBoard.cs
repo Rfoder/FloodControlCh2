@@ -19,11 +19,11 @@ namespace FloodControl
 
              //directories for chap 3 pg. 63
            public Dictionary<string, FallingPiece> fallingPieces =
-               new Directionary<string, FallingPiece>();
+               new Dictionary<string, FallingPiece>();
            public Dictionary<string, RotatingPiece> rotatingPieces =
-                  new Directionary<string, RotatingPiece>();
+                  new Dictionary<string, RotatingPiece>();
            public Dictionary<string, FadingPiece> fadingPieces =
-                  new Directionary<string, FadingPiece>();
+                  new Dictionary<string, FadingPiece>();
 
            public GameBoard()
            {
@@ -71,8 +71,12 @@ namespace FloodControl
             
             public void FillFromAbove(int x, int y)
             {
+                int rowLookup = y - 1;
                 // pg. 67
-                  int rowLookup = y - 1;
+                AddFallingPiece(x, y, GetSquare(x, y),
+                    GamePiece.PieceHeight *(y - rowLookup));
+
+                 
                 while (rowLookup >= 0)
              
               
@@ -82,8 +86,8 @@ namespace FloodControl
                         SetSquare(x, y,
                            GetSquare(x, rowLookup));
                          SetSquare(x, rowLookup, "Empty");
-                         AddFallingPiece(x, y, GetSquare(x, y),
-                    GamePiece.PieceHeight * (y - rowLookup));
+                        // AddFallingPiece(x, y, GetSquare(x, y),
+                  //  GamePiece.PieceHeight * (y - rowLookup));
 
                          rowLookup = -1;    
             }
